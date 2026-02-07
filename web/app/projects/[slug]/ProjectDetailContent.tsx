@@ -141,7 +141,7 @@ export function ProjectDetailContent({ project }: { project: Project }) {
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link href={`/projects/${project.id}/community`}>
-                  <Button size="lg" variant={project.id === 'churchthrive' ? 'outline' : 'default'}>
+                  <Button size="lg" variant={project.id === 'churchthrive' ? 'outline' : 'primary'}>
                     {project.id === 'churchthrive' ? '개발 커뮤니티 참여' : '커뮤니티 참여'}
                     <Icons.arrowRight className="ml-2 h-5 w-5" />
                   </Button>
