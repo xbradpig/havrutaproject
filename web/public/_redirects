@@ -1,5 +1,2 @@
-# www to non-www redirect
-https://www.havrutaproject.org/* https://havrutaproject.org/:splat 301
-
 # Legacy URL redirects (add as needed)
 # /old-page /new-page 301
