@@ -111,15 +111,48 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               <p className="mt-6 text-lg text-gray-600">
                 {project.description}
               </p>
+
+              {/* ChurchThrive 전용: 서비스 안내 배너 */}
+              {project.id === 'churchthrive' && 'serviceUrl' in project && (
+                <div className="mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-indigo-200">
+                  <p className="text-gray-700 mb-3">
+                    💡 <strong>실제 서비스 이용</strong>은 아래 버튼을 통해 ChurchThrive 공식 사이트에서 가능합니다.
+                  </p>
+                  <a
+                    href={(project as { serviceUrl: string }).serviceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700">
+                      서비스 시작하기
+                      <Icons.externalLink className="ml-2 h-5 w-5" />
+                    </Button>
+                  </a>
+                </div>
+              )}
+
+              {/* 커뮤니티 영역 설명 */}
+              {project.id === 'churchthrive' && (
+                <p className="mt-6 text-sm text-gray-500 bg-gray-100 p-3 rounded-lg">
+                  📢 이 페이지는 <strong>교회 관리자 및 개발자</strong>들이 ChurchThrive 서비스를
+                  함께 고도화하기 위한 커뮤니티 공간입니다.
+                </p>
+              )}
+
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link href="/contact">
-                  <Button size="lg">
-                    문의하기
+                <Link href={`/projects/${project.id}/community`}>
+                  <Button size="lg" variant={project.id === 'churchthrive' ? 'outline' : 'default'}>
+                    {project.id === 'churchthrive' ? '개발 커뮤니티 참여' : '커뮤니티 참여'}
                     <Icons.arrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <Link href="/resources">
+                <Link href="/contact">
                   <Button variant="outline" size="lg">
+                    문의하기
+                  </Button>
+                </Link>
+                <Link href="/resources">
+                  <Button variant="ghost" size="lg">
                     자료 받기
                   </Button>
                 </Link>
@@ -227,11 +260,27 @@ export function ProjectDetailContent({ project }: { project: Project }) {
               더 자세한 정보가 필요하시거나 상담을 원하시면 언제든 연락해 주세요.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link href="/contact">
-                <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
-                  무료 상담 신청
-                </Button>
-              </Link>
+              {project.id === 'churchthrive' && 'serviceUrl' in project ? (
+                <>
+                  <a href={(project as { serviceUrl: string }).serviceUrl} target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
+                      서비스 바로가기
+                      <Icons.externalLink className="ml-2 h-5 w-5" />
+                    </Button>
+                  </a>
+                  <Link href="/contact">
+                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                      파트너십 문의
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <Link href="/contact">
+                  <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
+                    무료 상담 신청
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
         </Container>

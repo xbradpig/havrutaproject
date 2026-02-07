@@ -16,6 +16,7 @@ import {
   Mail,
   Phone,
   MapPin,
+  ExternalLink,
 } from 'lucide-react';
 
 export const Icons = {
@@ -36,6 +37,7 @@ export const Icons = {
   mail: Mail,
   phone: Phone,
   mapPin: MapPin,
+  externalLink: ExternalLink,
 };
 
 export function getProjectIcon(iconName: string) {

@@ -32,6 +32,7 @@ export const PROJECTS = [
     icon: 'church',
     color: 'from-indigo-500 to-purple-600',
     href: '/projects/churchthrive',
+    serviceUrl: 'https://www.church-thrive.org',
   },
   {
     id: 'compass',
