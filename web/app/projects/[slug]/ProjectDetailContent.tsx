@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
@@ -8,6 +9,10 @@ import { Icons } from '@/components/ui/Icons';
 import { getProjectIcon } from '@/components/ui/Icons';
 import { PROJECTS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+
+const PROJECT_HERO_IMAGES: Record<string, string> = {
+  churchthrive: '/images/church-bg.jpg',
+};
 
 type Project = typeof PROJECTS[number];
 
@@ -72,24 +77,45 @@ export function ProjectDetailContent({ project }: { project: Project }) {
 
   const otherProjects = PROJECTS.filter((p) => p.id !== project.id).slice(0, 3);
 
+  const heroImage = PROJECT_HERO_IMAGES[project.id];
+
   return (
     <div className="pt-20 lg:pt-24">
       {/* Hero */}
-      <section className={cn('py-16 lg:py-24 bg-gradient-to-br', project.color.replace('from-', 'from-').replace('to-', 'to-'), 'from-opacity-10 to-opacity-5')}>
-        <Container>
+      <section className={cn(
+        'py-16 lg:py-24 relative overflow-hidden',
+        !heroImage && 'bg-gradient-to-br',
+        !heroImage && project.color,
+        !heroImage && 'from-opacity-10 to-opacity-5'
+      )}>
+        {/* Background Image */}
+        {heroImage && (
+          <>
+            <Image
+              src={heroImage}
+              alt=""
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 via-purple-900/70 to-indigo-900/80" />
+          </>
+        )}
+
+        <Container className="relative z-10">
           <div className="max-w-3xl">
             {/* Breadcrumb */}
             <nav className="mb-6">
               <ol className="flex items-center space-x-2 text-sm">
                 <li>
-                  <Link href="/" className="text-gray-500 hover:text-gray-700">홈</Link>
+                  <Link href="/" className={cn(heroImage ? "text-white/70 hover:text-white" : "text-gray-500 hover:text-gray-700")}>홈</Link>
                 </li>
-                <li className="text-gray-400">/</li>
+                <li className={heroImage ? "text-white/50" : "text-gray-400"}>/</li>
                 <li>
-                  <Link href="/projects" className="text-gray-500 hover:text-gray-700">프로젝트</Link>
+                  <Link href="/projects" className={cn(heroImage ? "text-white/70 hover:text-white" : "text-gray-500 hover:text-gray-700")}>프로젝트</Link>
                 </li>
-                <li className="text-gray-400">/</li>
-                <li className="text-gray-900 font-medium">{project.name}</li>
+                <li className={heroImage ? "text-white/50" : "text-gray-400"}>/</li>
+                <li className={cn(heroImage ? "text-white font-medium" : "text-gray-900 font-medium")}>{project.name}</li>
               </ol>
             </nav>
 
@@ -102,19 +128,28 @@ export function ProjectDetailContent({ project }: { project: Project }) {
                   {getProjectIcon(project.icon)}
                 </div>
               </div>
-              <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl font-heading">
+              <h1 className={cn(
+                "text-4xl font-bold sm:text-5xl font-heading",
+                heroImage ? "text-white" : "text-gray-900"
+              )}>
                 {project.name}
               </h1>
-              <p className="mt-2 text-xl text-primary-600 font-medium">
+              <p className={cn(
+                "mt-2 text-xl font-medium",
+                heroImage ? "text-indigo-200" : "text-primary-600"
+              )}>
                 {project.tagline}
               </p>
-              <p className="mt-6 text-lg text-gray-600">
+              <p className={cn(
+                "mt-6 text-lg",
+                heroImage ? "text-white/90" : "text-gray-600"
+              )}>
                 {project.description}
               </p>
 
               {/* ChurchThrive 전용: 서비스 안내 배너 */}
               {project.id === 'churchthrive' && 'serviceUrl' in project && (
-                <div className="mt-6 p-4 bg-white/80 backdrop-blur rounded-xl border border-indigo-200">
+                <div className="mt-6 p-4 bg-white/95 backdrop-blur-sm rounded-xl border border-white/20 shadow-lg">
                   <p className="text-gray-700 mb-3">
                     💡 <strong>실제 서비스 이용</strong>은 아래 버튼을 통해 ChurchThrive 공식 사이트에서 가능합니다.
                   </p>
@@ -133,26 +168,38 @@ export function ProjectDetailContent({ project }: { project: Project }) {
 
               {/* 커뮤니티 영역 설명 */}
               {project.id === 'churchthrive' && (
-                <p className="mt-6 text-sm text-gray-500 bg-gray-100 p-3 rounded-lg">
-                  📢 이 페이지는 <strong>교회 관리자 및 개발자</strong>들이 ChurchThrive 서비스를
+                <p className="mt-6 text-sm text-white/80 bg-white/10 backdrop-blur-sm p-3 rounded-lg border border-white/20">
+                  📢 이 페이지는 <strong className="text-white">교회 관리자 및 개발자</strong>들이 ChurchThrive 서비스를
                   함께 고도화하기 위한 커뮤니티 공간입니다.
                 </p>
               )}
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link href={`/projects/${project.id}/community`}>
-                  <Button size="lg" variant={project.id === 'churchthrive' ? 'outline' : 'primary'}>
+                  <Button
+                    size="lg"
+                    variant={heroImage ? 'outline' : 'primary'}
+                    className={heroImage ? 'border-white text-white hover:bg-white/10' : ''}
+                  >
                     {project.id === 'churchthrive' ? '개발 커뮤니티 참여' : '커뮤니티 참여'}
                     <Icons.arrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link href="/contact">
-                  <Button variant="outline" size="lg">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className={heroImage ? 'border-white/50 text-white hover:bg-white/10' : ''}
+                  >
                     문의하기
                   </Button>
                 </Link>
                 <Link href="/resources">
-                  <Button variant="ghost" size="lg">
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    className={heroImage ? 'text-white/80 hover:text-white hover:bg-white/10' : ''}
+                  >
                     자료 받기
                   </Button>
                 </Link>
