@@ -1,0 +1,26 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "havruta-project-web"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+# Workers.dev URL active
+workers_dev = true
+
+# Custom domains (override existing DNS records)
+[[routes]]
+pattern = "havrutaproject.org"
+custom_domain = true
+
+[[routes]]
+pattern = "www.havrutaproject.org"
+custom_domain = true
+
+# Static assets directory
+[assets]
+directory = ".open-next/assets"
+
+# Environment variables (set in Cloudflare dashboard for production)
+[vars]
+NEXT_PUBLIC_SUPABASE_URL = "https://xwczgvgfwrorhzmflrct.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3Y3pndmdmd3Jvcmh6bWZscmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NDYyMjIsImV4cCI6MjA4NTAyMjIyMn0.2RkZmBlboX9P3xcQVpZFBVpBCjul_zqxsmnXiZXcVVI"
