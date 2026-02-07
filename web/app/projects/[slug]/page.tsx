@@ -4,7 +4,7 @@ import { PROJECTS } from '@/lib/constants';
 import { ProjectDetailContent } from './ProjectDetailContent';
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateStaticParams() {
@@ -14,7 +14,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = PROJECTS.find((p) => p.id === params.slug);
+  const { slug } = await params;
+  const project = PROJECTS.find((p) => p.id === slug);
 
   if (!project) {
     return {
@@ -28,8 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ProjectPage({ params }: Props) {
-  const project = PROJECTS.find((p) => p.id === params.slug);
+export default async function ProjectPage({ params }: Props) {
+  const { slug } = await params;
+  const project = PROJECTS.find((p) => p.id === slug);
 
   if (!project) {
     notFound();
